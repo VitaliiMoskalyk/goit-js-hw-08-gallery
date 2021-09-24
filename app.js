@@ -104,8 +104,8 @@ function onClickImage(event) {
   galleryRef.removeEventListener('click', onClickImage);
 };
 
-function closeBtn(event) {
-  if (event.target.nodeName === 'IMG') return;
+function closeBtn() {
+ 
       modalLightboxImage.closest('.lightbox').classList.remove('is-open');
       modalLightboxImage.src = " ";
       galleryRef.addEventListener('click', onClickImage);
