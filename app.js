@@ -152,5 +152,5 @@ function svipeImages(event) {
  
 };
 
-const overlayModal = document.querySelector('.js-lightbox');
-overlayModal.addEventListener('click', closeBtn);
+// const overlayModal = document.querySelector('.js-lightbox');
+// overlayModal.addEventListener('click', closeBtn);
