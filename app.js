@@ -64,7 +64,9 @@ const galleryItems = [
   },
 ];
 
-
+console.log('меня баг, и я не могу от него избавиться(((')
+console.log('когда открыта модалка и кликнуть мышкой по картинке')
+console.log('перестает работать право, лево и ESC')
 const galleryRef = document.querySelector('.js-gallery');
 const imagesMarkup = createImagesMarkup(galleryItems);
 galleryRef.insertAdjacentHTML('beforeend', imagesMarkup);
@@ -78,7 +80,8 @@ function createImagesMarkup(galleryItems) {
         return `<li class="gallery__item">
             <a
                 class="gallery__link"
-                href="#"
+                href="${original}"
+                onclick="event.preventDefault()"
             >
             <img
                 class="gallery__image"
@@ -88,8 +91,7 @@ function createImagesMarkup(galleryItems) {
                 />
             </a>
         </li>`;
-    }).join('');
-    
+    }).join(''); 
 };
 
 galleryRef.addEventListener('click', onClickImage);
@@ -97,12 +99,58 @@ modalCloseBtn.addEventListener('click', closeBtn);
 
 function onClickImage(event) {
     if (event.target.nodeName !== 'IMG') return;
-    modalLightboxImage.src = event.target.dataset.source;
-    modalLightboxImage.closest('.lightbox').classList.add('is-open');
+      modalLightboxImage.src = event.target.dataset.source;
+      modalLightboxImage.closest('.lightbox').classList.add('is-open');
+  galleryRef.removeEventListener('click', onClickImage);
 };
 
-function closeBtn() {
-    modalLightboxImage.closest('.lightbox').classList.remove('is-open');
-    modalLightboxImage.src = " ";
+function closeBtn(event) {
+  if (event.target.nodeName === 'IMG') return;
+      modalLightboxImage.closest('.lightbox').classList.remove('is-open');
+      modalLightboxImage.src = " ";
+      galleryRef.addEventListener('click', onClickImage);
 };
 
+
+
+
+galleryRef.addEventListener('keydown',closeEsc);
+
+function closeEsc(event) {
+  
+  switch (event.key) {
+    case "Escape":
+      closeBtn()
+    break;
+  }
+};
+
+galleryRef.addEventListener('keydown', svipeImages);
+
+function svipeImages(event) {
+  
+  switch (event.key) {
+    case "ArrowRight":
+      const arrayOfLinks = [];
+      galleryItems.map(e => arrayOfLinks.push(e.original));
+      if ((arrayOfLinks.indexOf(modalLightboxImage.src) + 1)===arrayOfLinks.length) modalLightboxImage.src = arrayOfLinks[0];
+      else modalLightboxImage.src = arrayOfLinks[arrayOfLinks.indexOf(modalLightboxImage.src) + 1];
+    break;
+  };
+
+
+  switch (event.key) {
+    case "ArrowLeft":
+      const arrayOfLinks = [];
+      
+      galleryItems.map(e => arrayOfLinks.push(e.original));
+      if ((arrayOfLinks.indexOf(modalLightboxImage.src))===0) modalLightboxImage.src = arrayOfLinks[arrayOfLinks.length-1];
+      else modalLightboxImage.src = arrayOfLinks[arrayOfLinks.indexOf(modalLightboxImage.src) - 1];
+    break;
+  };
+
+ 
+};
+
+const overlayModal = document.querySelector('.js-lightbox');
+overlayModal.addEventListener('click', closeBtn);
