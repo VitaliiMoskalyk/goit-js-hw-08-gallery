@@ -64,16 +64,10 @@ const galleryItems = [
   },
 ];
 
-console.log('меня баг, и я не могу от него избавиться(((')
-console.log('когда открыта модалка и кликнуть мышкой по картинке')
-console.log('перестает работать право, лево и ESC')
+
 const galleryRef = document.querySelector('.js-gallery');
 const imagesMarkup = createImagesMarkup(galleryItems);
 galleryRef.insertAdjacentHTML('beforeend', imagesMarkup);
-
-const modalLightboxImage = document.querySelector('.lightbox__image');
-const modalCloseBtn = document.querySelector('.lightbox__button');
-
 
 function createImagesMarkup(galleryItems) {
     return galleryItems.map(({ preview, original, description }) => {
@@ -94,63 +88,56 @@ function createImagesMarkup(galleryItems) {
     }).join(''); 
 };
 
+const modalCloseBtn = document.querySelector('.lightbox__button');
+const modalLightbox = document.querySelector('.js-lightbox');
+const modalImage = document.querySelector('.lightbox__image');
+const overlayModal = document.querySelector('.lightbox__overlay');
+
+overlayModal.addEventListener('click', closeBtn);
 galleryRef.addEventListener('click', onClickImage);
 modalCloseBtn.addEventListener('click', closeBtn);
 
+
 function onClickImage(event) {
-    if (event.target.nodeName !== 'IMG') return;
-      modalLightboxImage.src = event.target.dataset.source;
-      modalLightboxImage.closest('.lightbox').classList.add('is-open');
-  galleryRef.removeEventListener('click', onClickImage);
+  if (event.target.nodeName !== 'IMG') return;
+  
+      modalImage.src = event.target.dataset.source;
+      modalLightbox.classList.add('is-open');
 };
 
 function closeBtn() {
- 
-      modalLightboxImage.closest('.lightbox').classList.remove('is-open');
-      modalLightboxImage.src = " ";
-      galleryRef.addEventListener('click', onClickImage);
+      modalLightbox.classList.remove('is-open');
+      modalImage.src = " ";
 };
 
+window.addEventListener('keydown', buttonsIventOnModalOpen);
 
+function buttonsIventOnModalOpen(event) {
+  if (!modalLightbox.classList.contains('is-open')) return;
 
-
-galleryRef.addEventListener('keydown',closeEsc);
-
-function closeEsc(event) {
+  const arrayOfLinks = [];
+  galleryItems.map(e => arrayOfLinks.push(e.original));
   
-  switch (event.key) {
+
+   switch (event.key) {
     case "Escape":
       closeBtn()
     break;
-  }
-};
-
-galleryRef.addEventListener('keydown', svipeImages);
-
-function svipeImages(event) {
-  
-  switch (event.key) {
-    case "ArrowRight":
-      const arrayOfLinks = [];
-      galleryItems.map(e => arrayOfLinks.push(e.original));
-      if ((arrayOfLinks.indexOf(modalLightboxImage.src) + 1)===arrayOfLinks.length) modalLightboxImage.src = arrayOfLinks[0];
-      else modalLightboxImage.src = arrayOfLinks[arrayOfLinks.indexOf(modalLightboxImage.src) + 1];
-    break;
   };
 
+  switch (event.key) {
+    case "ArrowRight":
+      if ((arrayOfLinks.indexOf(modalImage.src) + 1)===arrayOfLinks.length) modalImage.src = arrayOfLinks[0];
+      else modalImage.src = arrayOfLinks[arrayOfLinks.indexOf(modalImage.src) + 1];
+    break;
+  };
 
   switch (event.key) {
     case "ArrowLeft":
-      const arrayOfLinks = [];
-      
-      galleryItems.map(e => arrayOfLinks.push(e.original));
-      if ((arrayOfLinks.indexOf(modalLightboxImage.src))===0) modalLightboxImage.src = arrayOfLinks[arrayOfLinks.length-1];
-      else modalLightboxImage.src = arrayOfLinks[arrayOfLinks.indexOf(modalLightboxImage.src) - 1];
+      if ((arrayOfLinks.indexOf(modalImage.src))===0) modalImage.src = arrayOfLinks[arrayOfLinks.length-1];
+      else modalImage.src = arrayOfLinks[arrayOfLinks.indexOf(modalImage.src) - 1];
     break;
   };
-
- 
 };
 
-// const overlayModal = document.querySelector('.js-lightbox');
-// overlayModal.addEventListener('click', closeBtn);
+ 
