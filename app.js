@@ -102,15 +102,17 @@ function onClickImage(event) {
   if (event.target.nodeName !== 'IMG') return;
   
       modalImage.src = event.target.dataset.source;
-      modalLightbox.classList.add('is-open');
+  modalLightbox.classList.add('is-open');
+  window.addEventListener('keydown', buttonsIventOnModalOpen);
 };
 
 function closeBtn() {
       modalLightbox.classList.remove('is-open');
-      modalImage.src = " ";
+  modalImage.src = " ";
+  window.removeEventListener('keydown', buttonsIventOnModalOpen);
 };
 
-window.addEventListener('keydown', buttonsIventOnModalOpen);
+
 
 function buttonsIventOnModalOpen(event) {
   if (!modalLightbox.classList.contains('is-open')) return;
@@ -119,25 +121,19 @@ function buttonsIventOnModalOpen(event) {
   galleryItems.map(e => arrayOfLinks.push(e.original));
   
 
-   switch (event.key) {
+  switch (event.key) {
     case "Escape":
       closeBtn()
-    break;
-  };
-
-  switch (event.key) {
+      break;
+     
     case "ArrowRight":
-      if ((arrayOfLinks.indexOf(modalImage.src) + 1)===arrayOfLinks.length) modalImage.src = arrayOfLinks[0];
+      if ((arrayOfLinks.indexOf(modalImage.src) + 1) === arrayOfLinks.length) modalImage.src = arrayOfLinks[0];
       else modalImage.src = arrayOfLinks[arrayOfLinks.indexOf(modalImage.src) + 1];
-    break;
-  };
-
-  switch (event.key) {
+      break;
+     
     case "ArrowLeft":
-      if ((arrayOfLinks.indexOf(modalImage.src))===0) modalImage.src = arrayOfLinks[arrayOfLinks.length-1];
+      if ((arrayOfLinks.indexOf(modalImage.src)) === 0) modalImage.src = arrayOfLinks[arrayOfLinks.length - 1];
       else modalImage.src = arrayOfLinks[arrayOfLinks.indexOf(modalImage.src) - 1];
-    break;
+      break;
   };
-};
-
- 
+}
