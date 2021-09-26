@@ -102,14 +102,14 @@ function onClickImage(event) {
   if (event.target.nodeName !== 'IMG') return;
   
       modalImage.src = event.target.dataset.source;
-  modalLightbox.classList.add('is-open');
-  window.addEventListener('keydown', buttonsIventOnModalOpen);
+      modalLightbox.classList.add('is-open');
+      window.addEventListener('keydown', buttonsIventOnModalOpen);
 };
 
 function closeBtn() {
       modalLightbox.classList.remove('is-open');
-  modalImage.src = " ";
-  window.removeEventListener('keydown', buttonsIventOnModalOpen);
+      modalImage.src = " ";
+      window.removeEventListener('keydown', buttonsIventOnModalOpen);
 };
 
 
@@ -118,7 +118,7 @@ function buttonsIventOnModalOpen(event) {
   if (!modalLightbox.classList.contains('is-open')) return;
 
   const arrayOfLinks = [];
-  galleryItems.map(e => arrayOfLinks.push(e.original));
+      galleryItems.map(e => arrayOfLinks.push(e.original));
   
 
   switch (event.key) {
